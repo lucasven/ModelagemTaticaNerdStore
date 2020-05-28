@@ -17,14 +17,15 @@ namespace NerdStore.Catalogo.Data
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
 
-        public override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
                 property.SetColumnType("varchar(100)");
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogoContext).Assembly);
-            //base.a(modelBuilder);
+            
+            base.OnModelCreating(modelBuilder);
         }
 
         public async Task<bool> Commit()
@@ -40,9 +41,9 @@ namespace NerdStore.Catalogo.Data
                 {
                     entry.Property("DataCadastro").IsModified = false;
                 }
-
-                return await base.SaveChangesAsync() > 0;
             }
+
+            return await base.SaveChangesAsync() > 0;
         }
     }
 }
