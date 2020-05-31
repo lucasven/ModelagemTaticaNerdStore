@@ -12,6 +12,7 @@ using MediatR;
 using NerdStore.Catalogo.Data;
 using NerdStore.WebApp.MVC.Setup;
 using NerdStore.Catalogo.Domain.Events;
+using NerdStore.Vendas.Data;
 
 namespace NerdStore.WebApp.MVC
 {
@@ -34,6 +35,9 @@ namespace NerdStore.WebApp.MVC
             services.AddDbContext<CatalogoContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<VendasContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
