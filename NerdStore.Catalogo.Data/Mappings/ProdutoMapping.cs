@@ -25,20 +25,7 @@ namespace NerdStore.Catalogo.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(250)");
 
-            builder.OwnsOne(c => c.Dimensoes, cm =>
-            {
-                cm.Property(c => c.Altura)
-                    .HasColumnName("Altura")
-                    .HasColumnType("int");
-
-                cm.Property(c => c.Largura)
-                    .HasColumnName("Largura")
-                    .HasColumnType("int");
-
-                cm.Property(c => c.Profundidade)
-                    .HasColumnName("Profundidade")
-                    .HasColumnType("int");
-            });
+            builder.HasOne(c => c.Dimensoes);
 
             builder.ToTable("Produtos");
         }
