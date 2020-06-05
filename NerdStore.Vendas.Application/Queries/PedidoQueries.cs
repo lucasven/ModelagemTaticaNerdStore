@@ -54,7 +54,7 @@ namespace NerdStore.Vendas.Application.Queries
         {
             var pedidos = await pedidoRepository.ObterListaPorClienteId(clienteId);
 
-            pedidos = pedidos.Where(p => p.PedidoStatus == PedidoStatus.Pago || p.PedidoStatus == PedidoStatus.Cancelado)
+            pedidos = pedidos
                 .OrderByDescending(p => p.Codigo);
 
             if (!pedidos.Any()) return null;

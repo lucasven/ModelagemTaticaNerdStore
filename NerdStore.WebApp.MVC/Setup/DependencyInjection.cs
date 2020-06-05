@@ -1,10 +1,12 @@
-﻿using MediatR;
+﻿using EventSourcing;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using NerdStore.Catalogo.Application.Services;
 using NerdStore.Catalogo.Data;
 using NerdStore.Catalogo.Data.Repository;
 using NerdStore.Catalogo.Domain;
 using NerdStore.Core.Bus;
+using NerdStore.Core.Data.EventSource;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Vendas.Application.Commands;
 using NerdStore.Vendas.Application.Events;
@@ -23,8 +25,13 @@ namespace NerdStore.WebApp.MVC.Setup
     {
         public static void RegisterServices(this IServiceCollection services)
         {
+            //event sourcing
+            services.AddSingleton<IEventStoreService, EventStoreService>();
+            services.AddSingleton<IEventSourcingRepository, EventSourcingRepository>();
+
             //mediator
             services.AddScoped<IMediatorHandler, MediatrHandler>();
+            services.AddScoped<IMediator, Mediator>();
 
             // Notifications
             services.AddScoped<INotificationHandler<DomainNotification>, DomainNotificationHandler>();
@@ -44,10 +51,13 @@ namespace NerdStore.WebApp.MVC.Setup
             services.AddScoped<IRequestHandler<AtualizarItemPedidoCommand, bool>, PedidoCommandHandler>();
             services.AddScoped<IRequestHandler<RemoverItemPedidoCommand, bool>, PedidoCommandHandler>();
             services.AddScoped<IRequestHandler<AplicarVoucherPedidoCommand, bool>, PedidoCommandHandler>();
+            services.AddScoped<IRequestHandler<IniciarPedidoCommand, bool>, PedidoCommandHandler>();
 
             services.AddScoped<INotificationHandler<PedidoRascunhoIniciadoEvent>, PedidoEventHandler>();
             services.AddScoped<INotificationHandler<PedidoAtualizadoEvent>, PedidoEventHandler>();
             services.AddScoped<INotificationHandler<PedidoItemAdicionadoEvent>, PedidoEventHandler>();
+
+            
         }
     }
 }
